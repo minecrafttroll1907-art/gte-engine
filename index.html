@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +74,7 @@
 
 <div class="card">
     <h1>GTE Engine</h1>
-    <input type="text" id="gameUrl" placeholder="Chess.com Oyun Linkini Yapıştırın...">
+    <input type="text" id="gameUrl" placeholder="Paste Chess.com game link...">
     <button id="revealBtn" onclick="toggleReveal()">REVEAL ESTIMATE</button>
     <div id="result" class="result"></div>
 </div>
@@ -87,16 +87,16 @@ async function toggleReveal() {
 
     if (!inputUrl) {
         resultDiv.className = "result error";
-        resultDiv.innerText = "Lütfen geçerli bir Chess.com linki girin!";
+        resultDiv.innerText = "Please enter a valid Chess.com link!";
         return;
     }
 
     resultDiv.className = "result";
-    resultDiv.innerText = "Hesaplanıyor (Render uyanıyorsa 30-40sn sürebilir)...";
+    resultDiv.innerText = "Calculating (If Render is waking up, takes 30-40s)...";
     btn.disabled = true;
 
     try {
-        console.log("Python sunucusuna istek gönderiliyor...");
+        console.log("Sending request to Python server...");
         const response = await fetch('https://gte-engine-backend.onrender.com/api/get-elo', {
             method: 'POST',
             headers: {
@@ -109,10 +109,10 @@ async function toggleReveal() {
 
         if (response.ok && data.success) {
             resultDiv.className = "result success";
-            resultDiv.innerText = `Tahmini Elo: ${data.elo || data.estimated_elo || 'Hesaplandı'}`;
+            resultDiv.innerText = `Estimated Elo: ${data.elo || data.estimated_elo || 'Calculated'}`;
         } else {
             resultDiv.className = "result error";
-            resultDiv.innerText = data.error || "Tahmin alınamadı.";
+            resultDiv.innerText = data.error || "Estimate could not be retrieved.";
         }
     } catch (err) {
         console.error(err);
